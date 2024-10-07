@@ -1,0 +1,147 @@
+<div class="modal" tabindex="-1" style="display: block;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Form {{ user.id ? 'Update' : 'Create' }} User</h5>
+          <button 
+          (click)="onOpenClose()"
+          type="button" 
+          class="btn-close" 
+          data-bs-dismiss="modal" 
+          aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+            <form (ngSubmit)="onSubmit(userForm)" class="form-container my-1" #userForm="ngForm">
+                <div>
+                    <input 
+                    placeholder="Name" 
+                    name="name" 
+                    [(ngModel)]="user.name" 
+                    class="form-control" 
+                    required 
+                    maxlength="20"
+                    #name="ngModel"
+                    >
+                    @if(name.invalid && (name.dirty || name.touched)){
+                        @if(name.errors!['required']){
+                        <div class="text-danger">
+                            <strong>Nombre requerido </strong>
+                         </div>
+                        }
+                        @if(name.errors!['maxlength']){
+                            <div>
+                            <strong>Máximo 20 letras </strong> 
+                            </div>
+                        }
+                    }
+                </div>
+                <div>
+                    <input 
+                    placeholder="LastName" 
+                    name="lastName" 
+                    [(ngModel)]="user.lastName" 
+                    class="form-control" 
+                    required
+                    maxlength="20" 
+                    #lastName="ngModel"
+                    >
+                    @if(lastName.invalid && (lastName.dirty || lastName.touched)){
+                        @if(lastName.errors!['required']){
+                         <div class="text-danger">
+                               <strong>Apellido requerido</strong>
+                         </div>
+                        }
+                        @if(lastName.errors!['maxlength']){
+                            <div class="text-danger">
+                                <strong>Máximo 20 letras</strong> s   
+                            </div>
+                        }
+                    }
+                </div>
+                <div>
+                    <input 
+                    placeholder="Email" 
+                    name="email" 
+                    [(ngModel)]="user.email" 
+                    class="form-control my-2" 
+                    required
+                    email 
+                    #email="ngModel"
+                    >
+                    @if(email.invalid && (email.dirty || email.touched)){
+                        @if(email.errors!['required']){
+                            <div class="text-danger">
+                                <strong>Email requerido</strong> 
+                            </div>
+                        }       
+                        @if(email.errors!['email']) {
+                            <div class="text-danger">
+                                <strong>Formato email no válido</strong>
+                            </div>
+                        }
+                    }
+                </div>
+                <div>
+                    <input 
+                    placeholder="userName" 
+                    name="userName" 
+                    type="email" 
+                    [(ngModel)]="user.userName" 
+                    class="form-control"
+                    required 
+                    minlength="6" 
+                    #userName="ngModel"
+                    >
+                    @if(userName.invalid && (userName.dirty || userName.touched)){
+                        @if(userName.errors!['required']){
+                            <div class="text-danger">
+                                <strong>Nombre de usuario requerido</strong>
+                            </div>
+                        }
+                        @if(userName.errors!['minlength']){
+                            <div class="text-danger">
+                                <strong>Mínimo 6 letras</strong> 
+                            </div>
+                        }
+                    }
+                </div>
+                <div>
+                    <input 
+                    placeholder="Password" 
+                    name="password" 
+                    type="password" 
+                    [(ngModel)]="user.password" 
+                    class="form-control"
+                    required 
+                    minlength="6" 
+                    #password="ngModel"
+                    >
+                    @if(password.invalid && (password.dirty || password.touched)){
+                        @if(password.errors!['required']){
+                            <div class="text-danger">
+                                <strong>Contraseña requerida</strong>
+                            </div>
+                        }
+                        @if(password.errors!['minlength']){
+                            <div class="text-danger">
+                                <strong>Mínimo 6 letras</strong>  
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary my-2"
+                    [disabled]="userForm.invalid">
+                        {{ user.id ? 'Update' : 'Create' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+          (click)="onOpenClose()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

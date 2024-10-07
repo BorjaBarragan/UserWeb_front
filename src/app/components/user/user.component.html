@@ -1,0 +1,39 @@
+<h4 class="formulario-box my-3" style="color: #ffffff;">USUARIOS REGISTRADOS</h4>
+@if(users.length == 0){
+<div class="alert alert-warning">No hay usuarios</div>
+}@else{
+<table class="table table-hover my-1" style="border: 3px solid rgb(0, 119, 255);">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>LastName</th>
+            <th>Email</th>
+            <th>UserName</th>
+            <th>Remove</th>
+            <th>Update</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (user of users; track $index) {
+        <tr>
+            <td>{{user.name}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.userName}}</td>
+            <td>
+                <button class="btn btn-danger my-2 btn-sm"
+                (click)="onRemoveUser(user.id)">
+                    Delete
+                </button>
+            </td>
+            <td>
+                <button class="btn btn-info my-2 btn-sm"
+                (click)="onSelectedUser(user)">
+                    Update
+                </button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
