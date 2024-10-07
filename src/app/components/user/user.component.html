@@ -1,35 +1,35 @@
-<h4 class="formulario-box my-3" style="color: #ffffff;">USUARIOS REGISTRADOS</h4>
+
+<h1 style="color: rgb(255, 255, 255);">{{title}}</h1>
 @if(users.length == 0){
 <div class="alert alert-warning">No hay usuarios</div>
 }@else{
-<table class="table table-hover my-1" style="border: 3px solid rgb(0, 119, 255);">
-    <thead class="table-dark">
+<table class="table table-hover my-4" style="border: 3px solid #575ca0;">
+    <thead class="table-dark" >
         <tr>
-            <th>Name</th>
-            <th>LastName</th>
-            <th>Email</th>
-            <th>UserName</th>
-            <th>Remove</th>
-            <th>Update</th>
+            <th>NAME</th>
+            <th>LASTNAME</th>
+            <th>EMAIL</th>
+            <th>USERNAME</th>
+            <th>REMOVE</th>
+            <th>UPDATE</th>
         </tr>
     </thead>
     <tbody>
         @for (user of users; track $index) {
         <tr>
-            <td>{{user.name}}</td>
-            <td>{{user.lastName}}</td>
-            <td>{{user.email}}</td>
-            <td>{{user.userName}}</td>
+            <td class="username" >{{user.name}}</td>
+            <td class="username">{{user.lastName}}</td>
+            <td class="username">{{user.email}}</td>
+            <td class="username">{{user.userName}}</td>
             <td>
-                <button class="btn btn-danger my-2 btn-sm"
+                <button class="btn btn-error my-2 btn-sm fw-bold"
                 (click)="onRemoveUser(user.id)">
-                    Delete
+                    DELETE
                 </button>
             </td>
             <td>
-                <button class="btn btn-info my-2 btn-sm"
-                (click)="onSelectedUser(user)">
-                    Update
+                <button class="btn btn-lila my-2 btn-sm" (click)="onRemoveUser(user.id)">
+                    UPDATE
                 </button>
             </td>
         </tr>

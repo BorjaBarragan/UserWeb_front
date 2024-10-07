@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../models/user';
+import { SharingDataService } from '../../services/sharing-data.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -12,20 +14,24 @@ import { User } from '../../models/user';
 
 export class UserFormComponent {
 
-  @Input() user: User;
-  //Definimos el @Output para emitir el objeto user
-  @Output() newUserEventEmitter: EventEmitter<User> = new EventEmitter;
+  user: User;
 
-  @Output() openEventEmitter = new EventEmitter;
-
-  constructor() {
-    this.user = new User();
+  constructor(
+    private sharingData : SharingDataService,
+    private router: Router){
+     // Verifica si la navegación actual contiene algún estado (datos pasados desde otro componente)
+     if (this.router.getCurrentNavigation()?.extras.state) {
+      // Si existe estado en la navegación, asigna los usuarios desde ese estado a la variable `this.users`
+      this.user = this.router.getCurrentNavigation()?.extras.state!['user'];
+    } else {
+      this.user = new User();     
+    }
   }
-
+  
   onSubmit(userForm: NgForm): void {
     if (userForm.valid) {
       // Emitimos el objeto usuario
-      this.newUserEventEmitter.emit(this.user);
+      this.sharingData.newUserEventEmitter.emit(this.user);
       console.log(this.user);
       // Si es creación, reinicia el formulario
       }
@@ -39,7 +45,4 @@ export class UserFormComponent {
     userForm.resetForm();
   }
 
-  onOpenClose() {
-    this.openEventEmitter.emit();
-  }
 }

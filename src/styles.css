@@ -1,30 +1,40 @@
-body {
-    background-color: #0068ad; 
-  }
-
-  .formulario-box {
-    background-color: #2ab8ca; /* Fondo chulo */
-    color: white; /* Color de texto */
-    padding: 10px 20px; /* Espaciado interno */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    text-align: center; /* Centrar el texto */
-    display: inline-block; /* Ajustar al tamaño del contenido */
-    margin-bottom: 20px; /* Espaciado debajo del título */
-    font-weight: bold; /* Texto en negrita */
+.formulario-box {
+  background-color: #2ab8ca;
+  /* Fondo chulo */
+  color: white;
+  /* Color de texto */
+  padding: 10px 20px;
+  /* Espaciado interno */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Sombra suave */
+  text-align: center;
+  /* Centrar el texto */
+  display: inline-block;
+  /* Ajustar al tamaño del contenido */
+  margin-bottom: 20px;
+  /* Espaciado debajo del título */
+  font-weight: bold;
+  /* Texto en negrita */
 }
 
 .form-container {
-  background-color: #2ab8ca; /* Color de fondo gris claro */
-  padding: 5px; /* Espaciado interno */
-  border-radius: 8px; /* Bordes redondeados */
-  box-shadow: 0px 4px 8px rgba(0, 48, 180, 0.336); /* Sombra para darle algo de relieve */
-  max-width: 600px; /* Ancho máximo del formulario */
-  margin: auto; /* Centrar el formulario horizontalmente */
+  padding: 5px;
+  /* Espaciado interno */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  box-shadow: 0px 4px 8px rgba(0, 48, 180, 0.336);
+  /* Sombra para darle algo de relieve */
+  max-width: 600px;
+  /* Ancho máximo del formulario */
+  margin: auto;
+  /* Centrar el formulario horizontalmente */
 }
 
 .form-container .form-control {
-  margin-bottom: 5px; /* Espacio entre los inputs */
+  margin-bottom: 5px;
+  /* Espacio entre los inputs */
 }
 
 .abrir-modal {
@@ -51,20 +61,111 @@ body {
 
 @keyframes fadeIn {
   0% {
-      opacity: 0
+    opacity: 0
   }
 
   to {
-      opacity: 1
+    opacity: 1
   }
 }
 
 @-webkit-keyframes fadeIn {
   0% {
-      opacity: 0
+    opacity: 0
   }
 
   to {
-      opacity: 1
+    opacity: 1
   }
+}
+
+body {
+  background-image: url('app/assets/wallpaper1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: white;
+}
+
+.custom-card-bg {
+  background-color: rgba(255, 255, 255, 0.8); 
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 48, 180, 0.1);
+  color: #000000; /* Texto negro para contraste */
+}
+
+.custom-card-body {
+  background-color: #888cc0;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.custom-navbar-body {
+  background-color: #575ca0;
+}
+
+.custom-title {
+  color: #575ca0; /* Color de tu navbar */
+  font-family: 'Trebuchet MS', sans-serif; /* Cambia a la fuente que prefieras */
+  font-weight: bold; /* Texto en negrita */
+  font-size: 1.5rem; /* Aumenta el tamaño de la fuente */
+}
+
+.username {
+  font-family: 'Trebuchet MS', sans-serif; /* Cambia la fuente a Arial o a la que desees */
+  font-size: 1.1rem; /* Tamaño de la fuente */
+  color: #fff; /* Color de texto, si quieres que sea blanco */
+}
+
+.btn-lila {
+  background-color: #863fb9; /* Color lila claro */
+  color: #fefdff; /* Color del texto oscuro (puedes cambiarlo a blanco o a otro color si lo prefieres) */
+  border: none; /* Elimina el borde del botón */
+  padding: 10px 15px; /* Ajusta el espacio interno del botón */
+  border-radius: 5px; /* Bordes redondeados */
+  transition: background-color 0.3s ease; /* Añade una transición suave al color de fondo */
+  font-weight: bold;
+}
+.btn-lila:hover {
+  background-color: #863fb9; /* Cambia el color del fondo al pasar el ratón (ajusta el color si lo deseas) */
+  color: #fefdff; /* Color del texto, mantenlo igual o ajusta si es necesario */
+  transform: scale(1.15); /* Aumenta el tamaño del botón en un 5% al pasar el ratón */
+}
+.btn-error {
+  background-color: #da2a2a; /* Color lila claro */
+  color: #fefdff; /* Color del texto oscuro (puedes cambiarlo a blanco o a otro color si lo prefieres) */
+  border: none; /* Elimina el borde del botón */
+  padding: 10px 15px; /* Ajusta el espacio interno del botón */
+  border-radius: 5px; /* Bordes redondeados */
+  transition: background-color 0.3s ease; /* Añade una transición suave al color de fondo */
+  font-weight: bold;
+}
+.btn-error:hover {
+  background-color: #da2a2a; /* Cambia el color del fondo al pasar el ratón (ajusta el color si lo deseas) */
+  color: #fefdff; /* Color del texto, mantenlo igual o ajusta si es necesario */
+  transform: scale(1.15); /* Aumenta el tamaño del botón en un 5% al pasar el ratón */
+}
+.btn-create {
+  background-color: #4900a8; /* Color lila claro */
+  color: #fefdff; /* Color del texto oscuro (puedes cambiarlo a blanco o a otro color si lo prefieres) */
+  border: none; /* Elimina el borde del botón */
+  padding: 10px 15px; /* Ajusta el espacio interno del botón */
+  border-radius: 5px; /* Bordes redondeados */
+  transition: background-color 0.3s ease; /* Añade una transición suave al color de fondo */
+  font-weight: bold;
+}
+
+.btn-create:disabled {
+  background-color: #c8a1e2; /* Color más claro para el botón deshabilitado */
+  color: #bfbfbf; /* Color de texto más claro para el estado deshabilitado */
+  cursor: not-allowed; /* Cambia el cursor a un símbolo de no permitido */
+  opacity: 0.7; /* Añade una opacidad más baja si lo deseas */
+}
+.btn-create:hover {
+  background-color: #5b0bc4; /* Cambia el color del fondo al pasar el ratón (ajusta el color si lo deseas) */
+  color: #fefdff; /* Color del texto, mantenlo igual o ajusta si es necesario */
+  transform: scale(1.15); /* Aumenta el tamaño del botón en un 5% al pasar el ratón */
 }

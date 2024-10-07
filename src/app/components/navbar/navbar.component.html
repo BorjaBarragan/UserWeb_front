@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar-body">
+  <div class="container-fluid">
+    <!-- Marca de la app -->
+    <a class="navbar-brand fw-bold" href="#" style="font-family: 'Trebuchet MS', sans-serif;">UsersApp</a>
+    <!-- Botón toggle para dispositivos móviles -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menú de navegación -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <!-- Home link -->
+        <li class="nav-item">
+          <a class="nav-link text-white" aria-current="page" [routerLink]="['/users']" [state]="{users: users}">
+            Home
+          </a>
+        </li>
+        <!-- Botón destacado para añadir nuevo usuario -->
+        <li class="nav-item">
+          <a class="btn btn-outline-light ms-3" [routerLink]="['/user/create']">+ Add User</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

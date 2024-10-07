@@ -1,17 +1,4 @@
+<navbar [users]="users"/>
 <div class="container my-2">
-    <h1 style="color: rgb(255, 255, 255);">{{title}}</h1>
-    <button class="btn btn-primary my-2"
-    (click)="setOpen()">{{open==true ? "Close" : 'Create user'}}</button>
-    <div class="row"> 
-        <div class="col">
-            <user 
-            [users]="users" 
-            (idUserEventEmitter)="removeUser($event)"
-            (selectedUserEventEmitter)="setSelectedUser($event)"
-            />
-        </div>
-    </div>
+    <router-outlet/>
 </div>
-@if(open){
-    <user-form [user]="userSelected"(newUserEventEmitter)="addUser($event)" (openEventEmitter)="setOpen()"/>
-}
