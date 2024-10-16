@@ -37,7 +37,7 @@ export class UserAppComponent implements OnInit {
       this.router.navigate(['/users'], { state: { users: this.users } })
       Swal.fire({
         title: "Saved",
-        text: "The user is created successfully !",
+        text: "The user is created successfully !", 
         icon: "success"
       });
     })
@@ -61,6 +61,7 @@ export class UserAppComponent implements OnInit {
             // Una vez que la navegación anterior ha sido completada, navega a la ruta '/users'.
             // Pasa la lista de usuarios actualizada a través del estado para que la nueva vista los reciba.
             this.router.navigate(['/users'], { state: { users: this.users } });
+            
           });
           Swal.fire({
             title: "Deleted!",

@@ -21,6 +21,7 @@
     "boxicons": "^2.1.4",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.14.1",
+    "try-users-app": "file:",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },

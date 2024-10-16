@@ -1,153 +1,153 @@
 /* Estilos generales */
 body {
-  background-image: url('app/assets/wallpaper1.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: white;
-}
-
-.abrir-modal {
-  background-color: rgba(0, 0, 0, 0.7);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-}
-
-/* Animaciones */
-.animacion {
-  animation-duration: 2s;
-  animation-fill-mode: both;
-  -webkit-animation-duration: 2s;
-  -webkit-animation-fill-mode: both;
-}
-
-.fadeIn {
-  animation-name: fadeIn;
-  -webkit-animation-name: fadeIn;
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
+    background-image: url('app/assets/wallpaper1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
   }
-  to {
-    opacity: 1;
+  
+  .abrir-modal {
+    background-color: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
   }
-}
-
-@-webkit-keyframes fadeIn {
-  0% {
-    opacity: 0;
+  
+  /* Animaciones */
+  .animacion {
+    animation-duration: 2s;
+    animation-fill-mode: both;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-fill-mode: both;
   }
-  to {
-    opacity: 1;
+  
+  .fadeIn {
+    animation-name: fadeIn;
+    -webkit-animation-name: fadeIn;
   }
-}
-
-/* Contenedores */
-.form-container {
-  padding: 5px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 48, 180, 0.336);
-  max-width: 600px;
-  margin: auto;
-}
-
-.formulario-box {
-  background-color: #2ab8ca;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  display: inline-block;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-.custom-card-bg {
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid #ffffff;
-  box-shadow: 0px 4px 8px rgba(0, 48, 180, 0.1);
-  color: #000;
-}
-
-.custom-card-body {
-  background-color: #888cc0;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.custom-navbar-body {
-  background-color: #575ca0;
-}
-
-/* Inputs */
-.form-container .form-control {
-  margin-bottom: 5px;
-}
-
-/* Títulos y texto */
-.custom-title {
-  color: #575ca0;
-  font-family: 'Trebuchet MS', sans-serif;
-  font-weight: bold;
-  font-size: 1.5rem;
-}
-
-.username {
-  font-family: 'Trebuchet MS', sans-serif;
-  font-size: 1.1rem;
-  color: #fff;
-}
-
-/* Botones */
-.btn-lila, .btn-error, .btn-create {
-  color: #fefdff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  font-weight: bold;
-}
-
-.btn-lila {
-  background-color: #863fb9;
-}
-
-.btn-lila:hover {
-  background-color: #863fb9;
-  transform: scale(1.15);
-}
-
-.btn-error {
-  background-color: #da2a2a;
-}
-
-.btn-error:hover {
-  background-color: #da2a2a;
-  transform: scale(1.15);
-}
-
-.btn-create {
-  background-color: #4900a8;
-}
-
-.btn-create:hover {
-  background-color: #5b0bc4;
-  transform: scale(1.15);
-}
-
-.btn-create:disabled {
-  background-color: #c8a1e2;
-  color: #bfbfbf;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @-webkit-keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Contenedores */
+  .form-container {
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 48, 180, 0.336);
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .formulario-box {
+    background-color: #2ab8ca;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .custom-card-bg {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ffffff;
+    box-shadow: 0px 4px 8px rgba(0, 48, 180, 0.1);
+    color: #000;
+  }
+  
+  .custom-card-body {
+    background-color: #888cc0;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .custom-navbar-body {
+    background-color: #575ca0;
+  }
+  
+  /* Inputs */
+  .form-container .form-control {
+    margin-bottom: 5px;
+  }
+  
+  /* Títulos y texto */
+  .custom-title {
+    color: #575ca0;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  
+  .username {
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+  
+  /* Botones */
+  .btn-lila, .btn-error, .btn-create {
+    color: #fefdff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-weight: bold;
+  }
+  
+  .btn-lila {
+    background-color: #863fb9;
+  }
+  
+  .btn-lila:hover {
+    background-color: #863fb9;
+    transform: scale(1.15);
+  }
+  
+  .btn-error {
+    background-color: #da2a2a;
+  }
+  
+  .btn-error:hover {
+    background-color: #da2a2a;
+    transform: scale(1.15);
+  }
+  
+  .btn-create {
+    background-color: #4900a8;
+  }
+  
+  .btn-create:hover {
+    background-color: #5b0bc4;
+    transform: scale(1.15);
+  }
+  
+  .btn-create:disabled {
+    background-color: #c8a1e2;
+    color: #bfbfbf;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
