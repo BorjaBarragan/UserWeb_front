@@ -20,24 +20,41 @@ export class UserAppComponent implements OnInit {
     private router: Router,
     private service: UserService,
     private sharingData: SharingDataService
-  ) { }
+  ) {
+
+  }
+
   ngOnInit(): void {
-    this.service.findAll().subscribe(users => this.users = users);
-    this.addUser();
-    this.removeUser();
+    this.service.findAll().subscribe(users => this.users = users);  // Aquí recibimos todos los usuarios.
+    this.addUser();    // Escuchar cuando se agrega un nuevo usuario.
+    this.removeUser(); // Escuchar cuando se elimina un usuario.
+    this.findUserById(); // Escuchar cuando se selecciona un usuario para editar.
+  }
+
+  findUserById() {
+    this.sharingData.findUserByIdEventEmitter.subscribe(id => {
+      // Buscar el usuario con ese ID en la lista de usuarios
+      const user = this.users.find(user => user.id == id);
+      // Emitir el usuario encontrado para que lo reciba el formulario
+      this.sharingData.selectUserEventEmitter.emit(user);
+    });
   }
 
   addUser() {
     this.sharingData.newUserEventEmitter.subscribe(user => {
       if (user.id > 0) {
-        this.users = this.users.map(u => (u.id == user.id) ? { ...user } : u);
+        this.service.update(user).subscribe(userUpdate => {
+          this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
+        })
       } else {
-        this.users = [...this.users, { ...user, id: new Date().getTime() }];
+        this.service.create(user).subscribe(userNew => {
+          this.users = [...this.users, { ...userNew }];
+        })
       }
-      this.router.navigate(['/users'], { state: { users: this.users } })
+      this.router.navigate(['/users']);
       Swal.fire({
         title: "Saved",
-        text: "The user is created successfully !", 
+        text: "The user is created successfully !",
         icon: "success"
       });
     })
@@ -55,14 +72,15 @@ export class UserAppComponent implements OnInit {
         confirmButtonText: "Yes, delete it!"
       }).then((result) => {
         if (result.isConfirmed) {
-          this.users = this.users.filter(user => user.id !== id);
-          // Navega a la ruta '/users/create' pero sin cambiar la URL visible en el navegador (navegación silenciosa).
-          this.router.navigate(['/user/create'], { skipLocationChange: true }).then(() => {
-            // Una vez que la navegación anterior ha sido completada, navega a la ruta '/users'.
-            // Pasa la lista de usuarios actualizada a través del estado para que la nueva vista los reciba.
-            this.router.navigate(['/users'], { state: { users: this.users } });
-            
-          });
+          this.service.delete(id).subscribe(() => {
+            this.users = this.users.filter(user => user.id !== id);
+            // Navega a la ruta '/users/create' pero sin cambiar la URL visible en el navegador (navegación silenciosa).
+            this.router.navigate(['/user/create'], { skipLocationChange: true }).then(() => {
+              // Una vez que la navegación anterior ha sido completada, navega a la ruta '/users'.
+              // Pasa la lista de usuarios actualizada a través del estado para que la nueva vista los reciba.
+              this.router.navigate(['/users']);
+            });
+          })
           Swal.fire({
             title: "Deleted!",
             text: "The user has been deleted.",

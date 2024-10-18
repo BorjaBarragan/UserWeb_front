@@ -1,21 +1,43 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/user';
-import { map, Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { User } from '../models/user';  
+import { Observable } from 'rxjs';  
+import { HttpClient } from '@angular/common/http'; 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root'  
 })
 export class UserService {
 
-  private users: User[] = [];
+  //private users: User[] = [];  // Almacena temporalmente los usuarios (aunque no lo estás usando aquí)
+  private url: string = 'http://localhost:8080/api/users';  // URL base del backend
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}  // Inyecta el servicio HttpClient para hacer peticiones HTTP
 
-  findAll(): Observable<User[]>{
-    return this.http.get('http://localhost:8080/api/users').pipe(
-      map((users:any) => users as User[]),
-    );
+  // Método para obtener todos los usuarios (GET /api/users)
+  findAll(): Observable<User[]> {
+    // Hace una petición HTTP GET a la URL del backend y devuelve un Observable de tipo User[]
+    return this.http.get<User[]>(this.url);
   }
 
+  // Método para obtener un usuario por ID (GET /api/users/{id})
+  findById(id: number): Observable<User> {
+    // Hace una petición HTTP GET a la URL del backend con el ID del usuario y devuelve un Observable de tipo User
+    return this.http.get<User>(`${this.url}/${id}`);
+  }
+
+  // Método para crear un nuevo usuario (POST /api/users)
+  create(user: User): Observable<User> {
+    // Hace una petición HTTP POST al backend con los datos del nuevo usuario y devuelve el usuario creado
+    return this.http.post<User>(this.url, user);
+  }
+
+  // Método para actualizar un usuario existente (PUT /api/users/{id})
+  update(user: User): Observable<User> {
+    // Hace una petición HTTP PUT al backend con los nuevos datos del usuario y devuelve el usuario actualizado
+    return this.http.put<User>(`${this.url}/${user.id}`, user);
+  }
+
+  delete(id:number): Observable<void>{
+    return this.http.delete<void>(`${this.url}/${id}`)
+  }
 }

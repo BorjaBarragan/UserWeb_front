@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component} from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { User } from '../../models/user';
+
 
 @Component({
   selector: 'navbar',
@@ -9,7 +9,5 @@ import { User } from '../../models/user';
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
-
-  @Input() users: User[] = [] ;
 
 }
