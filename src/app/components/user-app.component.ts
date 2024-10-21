@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'user-app',
@@ -45,13 +46,14 @@ export class UserAppComponent implements OnInit {
       if (user.id > 0) {
         this.service.update(user).subscribe(userUpdate => {
           this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
+          this.router.navigate(['/users'], { state: { users: this.users } });
         })
       } else {
         this.service.create(user).subscribe(userNew => {
           this.users = [...this.users, { ...userNew }];
+          this.router.navigate(['/users'], { state: { users: this.users } });
         })
       }
-      this.router.navigate(['/users']);
       Swal.fire({
         title: "Saved",
         text: "The user is created successfully !",
@@ -73,12 +75,10 @@ export class UserAppComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           this.service.delete(id).subscribe(() => {
-            this.users = this.users.filter(user => user.id !== id);
+            this.users = this.users.filter(user => user.id != id);
             // Navega a la ruta '/users/create' pero sin cambiar la URL visible en el navegador (navegación silenciosa).
             this.router.navigate(['/user/create'], { skipLocationChange: true }).then(() => {
-              // Una vez que la navegación anterior ha sido completada, navega a la ruta '/users'.
-              // Pasa la lista de usuarios actualizada a través del estado para que la nueva vista los reciba.
-              this.router.navigate(['/users']);
+              this.router.navigate(['/users'], { state: { users: this.users } });
             });
           })
           Swal.fire({
