@@ -16,6 +16,7 @@ import { state } from '@angular/animations';
 export class UserAppComponent implements OnInit {
 
   users: User[] = [];
+  paginator : any = {} ;
 
   constructor(
     private router: Router,
@@ -40,8 +41,11 @@ export class UserAppComponent implements OnInit {
     this.pageUsersEvent(); // Escuchar cuando se cambia de pagina
   }
 
-  pageUsersEvent(){
-    this.sharingData.pageUsersEventeEmitter.subscribe(users => this.users = users);
+  pageUsersEvent() {
+    this.sharingData.pageUsersEventeEmitter.subscribe(pageable =>{ 
+      this.users = pageable.users;
+      this.paginator = pageable.paginator;
+    });
   }
 
   findUserById() {
@@ -56,14 +60,19 @@ export class UserAppComponent implements OnInit {
   addUser() {
     this.sharingData.newUserEventEmitter.subscribe(user => {
       if (user.id > 0) {
+        //Observable 1 - update
         this.service.update(user).subscribe(
+          //next,error son callbacks (funciones de retorno) que se usan en las suscripciones a un observable en Angular.
           //next y error son atributos de un objeto, por lo tanto van ani {}
           {
             //next: cuando todo sale bien
             next: (userUpdate) => {
+              //map, actualiza el array de usuarios reemplazandos el usuarios que ha sido actualizado userUpdate
               this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
-              this.router.navigate(['/users'], { state: { users: this.users } });
-
+              this.router.navigate(['/users'], { 
+                state: { 
+                  users: this.users,
+                  paginator: this.paginator } });
               Swal.fire({
                 title: "Updated",
                 text: "The user is updated successfully !",
@@ -71,7 +80,6 @@ export class UserAppComponent implements OnInit {
               });
             },
             error: (err) => {
-              // console.log(err.error)
               //para enviar el error al user-form. creamos evento en sharing y lo emitimos desde aqui.
               if (err.status == 400) {
                 this.sharingData.errorsUserFormsEventEmitter.emit(err.error);
@@ -81,10 +89,18 @@ export class UserAppComponent implements OnInit {
         )
       } else {
         this.service.create(user).subscribe(
+          //Observable 2- create
           {
             next: (userNew) => {
+              //aqui creamos una copia de todos los usuarios
+              //añade un nuevo usuario al final de la copia
+              //actualiza this.users para que sea el nuevo array con todos los usuarios y el nuevo
               this.users = [...this.users, { ...userNew }];
-              this.router.navigate(['/users'], { state: { users: this.users } });
+              this.router.navigate(['/users'], { 
+                state: { 
+                  users: this.users,
+                  paginator: this.paginator
+                 } });
               Swal.fire({
                 title: "Created!",
                 text: "The user is created successfully !",
@@ -92,7 +108,6 @@ export class UserAppComponent implements OnInit {
               });
             },
             error: (err) => {
-              // console.log(err.error)
               console.log(err.status)
               if (err.status == 400) {
                 this.sharingData.errorsUserFormsEventEmitter.emit(err.error);
@@ -120,7 +135,11 @@ export class UserAppComponent implements OnInit {
             this.users = this.users.filter(user => user.id != id);
             // Navega a la ruta '/users/create' pero sin cambiar la URL visible en el navegador (navegación silenciosa).
             this.router.navigate(['/user/create'], { skipLocationChange: true }).then(() => {
-              this.router.navigate(['/users'], { state: { users: this.users } });
+              this.router.navigate(['/users'], { 
+                state: { 
+                  users: this.users,
+                  paginator:this.paginator
+                } });
             });
           })
           Swal.fire({
