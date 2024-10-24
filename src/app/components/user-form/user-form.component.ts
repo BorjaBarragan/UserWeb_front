@@ -15,6 +15,8 @@ import { UserService } from '../../services/user.service';
 export class UserFormComponent implements OnInit {
 
   user: User;
+  //objeto que contiene cada atributo con el mensaje error
+  errors: any = {};
 
   constructor(
     private sharingData: SharingDataService,
@@ -26,6 +28,8 @@ export class UserFormComponent implements OnInit {
   }
   
   ngOnInit(): void {
+    //aqui es donde escuchamos los eventos.
+    this.sharingData.errorsUserFormsEventEmitter.subscribe(errors => this.errors = errors);
     this.sharingData.selectUserEventEmitter.subscribe(user => this.user = user);
     //Nos suscribimos a los cambios en los parámetros de la URL usando 'paramMap'.
     //Queremos extraer el parámetro 'id' de la URL, que puede ser algo como '/users/5'.
@@ -42,14 +46,12 @@ export class UserFormComponent implements OnInit {
   }
 
   onSubmit(userForm: NgForm): void {
-    if (userForm.valid) {
-      // Emitimos el objeto usuario
+    //if (userForm.valid) {
       this.sharingData.newUserEventEmitter.emit(this.user);
       console.log(this.user);
-      // Si es creación, reinicia el formulario
-    }
-    userForm.reset();
-    userForm.resetForm();
+    //}
+    // userForm.reset();
+    // userForm.resetForm();
   }
 
   onClear(userForm: NgForm) {

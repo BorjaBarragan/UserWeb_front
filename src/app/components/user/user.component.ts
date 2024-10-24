@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { SharingDataService } from '../../services/sharing-data.service';
 
@@ -19,7 +19,9 @@ export class UserComponent implements OnInit {
   constructor(
     private sharingData: SharingDataService,
     private service: UserService,  //servicio UserService para obtener datos de usuarios
-    private router: Router) {      //servicio Router para acceder a la navegación actual y su estado
+    private router: Router,
+    private route: ActivatedRoute
+  ) {      //servicio Router para acceder a la navegación actual y su estado
     //
     if (this.router.getCurrentNavigation()?.extras.state) {
       this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
@@ -29,7 +31,15 @@ export class UserComponent implements OnInit {
     //Creamos este if para que solo vaya a buscar los users solo una vez.
     if (this.users == undefined || this.users == null || this.users.length == 0) {
       console.log('Consulta findAll()')
-      this.service.findAll().subscribe(users => this.users = users);
+      // this.service.findAll().subscribe(users => this.users = users);
+      this.route.paramMap.subscribe(params => {
+        const page = +(params.get('page') || '0');
+        console.log(page)
+        this.service.findAllPageable(page).subscribe(pageable =>{ 
+          this.users = pageable.content as User[]
+          this.sharingData.pageUsersEventeEmitter.emit(this.users);
+        });
+      })
     }
   }
 

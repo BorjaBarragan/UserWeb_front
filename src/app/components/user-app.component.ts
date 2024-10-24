@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 import Swal from 'sweetalert2';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
 import { state } from '@angular/animations';
@@ -20,16 +20,28 @@ export class UserAppComponent implements OnInit {
   constructor(
     private router: Router,
     private service: UserService,
-    private sharingData: SharingDataService
+    private sharingData: SharingDataService,
+    private route: ActivatedRoute
   ) {
 
   }
 
   ngOnInit(): void {
-    this.service.findAll().subscribe(users => this.users = users);  // Aquí recibimos todos los usuarios.
+    //Comentamos bloque, ya que no es necesario. Ahora se realiza en user.component
+    // this.service.findAll().subscribe(users => this.users = users);  // Aquí recibimos todos los usuarios.
+    // this.route.paramMap.subscribe(params => {
+    //   const page = +(params.get('page') || '0');
+    //   console.log(page)
+    //   //this.service.findAllPageable(page).subscribe(pageable => this.users = pageable.content as User[]);
+    // })
     this.addUser();    // Escuchar cuando se agrega un nuevo usuario.
     this.removeUser(); // Escuchar cuando se elimina un usuario.
     this.findUserById(); // Escuchar cuando se selecciona un usuario para editar.
+    this.pageUsersEvent(); // Escuchar cuando se cambia de pagina
+  }
+
+  pageUsersEvent(){
+    this.sharingData.pageUsersEventeEmitter.subscribe(users => this.users = users);
   }
 
   findUserById() {
@@ -44,21 +56,51 @@ export class UserAppComponent implements OnInit {
   addUser() {
     this.sharingData.newUserEventEmitter.subscribe(user => {
       if (user.id > 0) {
-        this.service.update(user).subscribe(userUpdate => {
-          this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
-          this.router.navigate(['/users'], { state: { users: this.users } });
-        })
+        this.service.update(user).subscribe(
+          //next y error son atributos de un objeto, por lo tanto van ani {}
+          {
+            //next: cuando todo sale bien
+            next: (userUpdate) => {
+              this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
+              this.router.navigate(['/users'], { state: { users: this.users } });
+
+              Swal.fire({
+                title: "Updated",
+                text: "The user is updated successfully !",
+                icon: "success"
+              });
+            },
+            error: (err) => {
+              // console.log(err.error)
+              //para enviar el error al user-form. creamos evento en sharing y lo emitimos desde aqui.
+              if (err.status == 400) {
+                this.sharingData.errorsUserFormsEventEmitter.emit(err.error);
+              }
+            }
+          }
+        )
       } else {
-        this.service.create(user).subscribe(userNew => {
-          this.users = [...this.users, { ...userNew }];
-          this.router.navigate(['/users'], { state: { users: this.users } });
-        })
+        this.service.create(user).subscribe(
+          {
+            next: (userNew) => {
+              this.users = [...this.users, { ...userNew }];
+              this.router.navigate(['/users'], { state: { users: this.users } });
+              Swal.fire({
+                title: "Created!",
+                text: "The user is created successfully !",
+                icon: "success"
+              });
+            },
+            error: (err) => {
+              // console.log(err.error)
+              console.log(err.status)
+              if (err.status == 400) {
+                this.sharingData.errorsUserFormsEventEmitter.emit(err.error);
+              }
+            }
+          }
+        )
       }
-      Swal.fire({
-        title: "Saved",
-        text: "The user is created successfully !",
-        icon: "success"
-      });
     })
   }
 

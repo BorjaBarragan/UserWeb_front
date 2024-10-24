@@ -19,6 +19,10 @@ export class UserService {
     return this.http.get<User[]>(this.url);
   }
 
+  findAllPageable(page:number): Observable<any> {
+    return this.http.get<any>(`${this.url}/page/${page}`);
+  }
+
   // Método para obtener un usuario por ID (GET /api/users/{id})
   findById(id: number): Observable<User> {
     // Hace una petición HTTP GET a la URL del backend con el ID del usuario y devuelve un Observable de tipo User
