@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/user';  
-import { Observable } from 'rxjs';  
-import { HttpClient } from '@angular/common/http'; 
+import { User } from '../models/user';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'  
+  providedIn: 'root'
 })
 //Se encarga de hacer peticiones al backend
 export class UserService {
@@ -12,15 +12,27 @@ export class UserService {
   //private users: User[] = [];  // Almacena temporalmente los usuarios (aunque no lo estás usando aquí)
   private url: string = 'http://localhost:8080/api/users';  // URL base del backend
 
-  constructor(private http: HttpClient) {}  // Inyecta el servicio HttpClient para hacer peticiones HTTP
+  constructor(private http: HttpClient) { }  // Inyecta el servicio HttpClient para hacer peticiones HTTP
 
   // Método para obtener todos los usuarios (GET /api/users)
   findAll(): Observable<User[]> {
     // Hace una petición HTTP GET a la URL del backend y devuelve un Observable de tipo User[]
     return this.http.get<User[]>(this.url);
   }
+  //EJEMPLO TEMPLATE LITERALS
+  //  const name = 'Juan';
+  // const age = 25;
 
-  findAllPageable(page:number): Observable<any> {
+  //Forma normal
+  // const message = 'Hola, mi nombre es ' + name + ' y tengo ' + age + ' años.';
+
+  //Forma template literals
+  // const message = `Hola, mi nombre es ${name} y tengo ${age} años.`;
+
+  // El resultado de ambos ejemplos es: "Hola, mi nombre es Juan y tengo 25 años."
+
+  findAllPageable(page: number): Observable<any> {
+    //usamos template literals ` `
     return this.http.get<any>(`${this.url}/page/${page}`);
   }
 
@@ -42,7 +54,7 @@ export class UserService {
     return this.http.put<User>(`${this.url}/${user.id}`, user);
   }
 
-  delete(id:number): Observable<void>{
+  delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`)
   }
 }
