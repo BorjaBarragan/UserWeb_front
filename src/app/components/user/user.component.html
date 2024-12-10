@@ -11,8 +11,10 @@
             <th>LASTNAME</th>
             <th>EMAIL</th>
             <th>USERNAME</th>
-            <th>REMOVE</th>
-            <th>UPDATE</th>
+            @if(admin){
+                <th>REMOVE</th>
+                <th>UPDATE</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -23,6 +25,7 @@
             <td class="username">{{user.lastName}}</td>
             <td class="username">{{user.email}}</td>
             <td class="username">{{user.userName}}</td>
+            @if(admin){
             <td>
                 <button class="btn btn-error my-2 btn-sm fw-bold"
                 (click)="onRemoveUser(user.id)">
@@ -35,6 +38,7 @@
                     UPDATE
                 </button>
             </td>
+        }
         </tr>
         }
     </tbody>

@@ -6,6 +6,7 @@ import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
 import { state } from '@angular/animations';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'user-app',
@@ -16,33 +17,58 @@ import { state } from '@angular/animations';
 export class UserAppComponent implements OnInit {
 
   users: User[] = [];
-  paginator : any = {} ;
+  paginator: any = {};
 
   constructor(
     private router: Router,
     private service: UserService,
     private sharingData: SharingDataService,
-    private route: ActivatedRoute
+    private authService: AuthService,
   ) {
 
   }
 
   ngOnInit(): void {
-    //Comentamos bloque, ya que no es necesario. Ahora se realiza en user.component
-    // this.service.findAll().subscribe(users => this.users = users);  // Aquí recibimos todos los usuarios.
-    // this.route.paramMap.subscribe(params => {
-    //   const page = +(params.get('page') || '0');
-    //   console.log(page)
-    //   //this.service.findAllPageable(page).subscribe(pageable => this.users = pageable.content as User[]);
-    // })
-    this.addUser();    // Escuchar cuando se agrega un nuevo usuario.
-    this.removeUser(); // Escuchar cuando se elimina un usuario.
-    this.findUserById(); // Escuchar cuando se selecciona un usuario para editar.
-    this.pageUsersEvent(); // Escuchar cuando se cambia de pagina
+    this.addUser();
+    this.removeUser();
+    this.findUserById();
+    this.pageUsersEvent();
+    this.handlerLogin();
+  }
+
+  handlerLogin() {
+    this.sharingData.handlerLoginEventEmitter.subscribe(({ userName, password }) => {
+      console.log(userName + ' ' + password);
+
+      this.authService.loginUser({ userName, password }).subscribe({
+        next: response => {
+          const token = response.token;
+          const payload = this.authService.getPayload(token);
+          const user = { userName: payload.sub }
+          const login = {
+            user,
+            isAuth: true,
+            isAdmin: payload.isAdmin
+          }
+          this.authService.token = token;
+          this.authService.user = login;
+          this.router.navigate(['/users/page/0']);
+        },
+        error: error => {
+
+          if (error.status == 401) {
+            Swal.fire('Error en el Login', error.error.message, 'error');
+          } else {
+            throw error
+          }
+        }
+      }
+      );
+    })
   }
 
   pageUsersEvent() {
-    this.sharingData.pageUsersEventeEmitter.subscribe(pageable =>{ 
+    this.sharingData.pageUsersEventeEmitter.subscribe(pageable => {
       this.users = pageable.users;
       this.paginator = pageable.paginator;
     });
@@ -69,10 +95,12 @@ export class UserAppComponent implements OnInit {
             next: (userUpdate) => {
               //map, actualiza el array de usuarios reemplazandos el usuarios que ha sido actualizado userUpdate
               this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
-              this.router.navigate(['/users'], { 
-                state: { 
+              this.router.navigate(['/users'], {
+                state: {
                   users: this.users,
-                  paginator: this.paginator } });
+                  paginator: this.paginator
+                }
+              });
               Swal.fire({
                 title: "Updated",
                 text: "The user is updated successfully !",
@@ -96,11 +124,12 @@ export class UserAppComponent implements OnInit {
               //añade un nuevo usuario al final de la copia
               //actualiza this.users para que sea el nuevo array con todos los usuarios y el nuevo
               this.users = [...this.users, { ...userNew }];
-              this.router.navigate(['/users'], { 
-                state: { 
+              this.router.navigate(['/users'], {
+                state: {
                   users: this.users,
                   paginator: this.paginator
-                 } });
+                }
+              });
               Swal.fire({
                 title: "Created!",
                 text: "The user is created successfully !",
@@ -135,11 +164,12 @@ export class UserAppComponent implements OnInit {
             this.users = this.users.filter(user => user.id != id);
             // Navega a la ruta '/users/create' pero sin cambiar la URL visible en el navegador (navegación silenciosa).
             this.router.navigate(['/user/create'], { skipLocationChange: true }).then(() => {
-              this.router.navigate(['/users'], { 
-                state: { 
+              this.router.navigate(['/users'], {
+                state: {
                   users: this.users,
-                  paginator:this.paginator
-                } });
+                  paginator: this.paginator
+                }
+              });
             });
           })
           Swal.fire({

@@ -9,7 +9,6 @@ import { HttpClient } from '@angular/common/http';
 //Se encarga de hacer peticiones al backend
 export class UserService {
 
-  //private users: User[] = [];  // Almacena temporalmente los usuarios (aunque no lo estás usando aquí)
   private url: string = 'http://localhost:8080/api/users';  // URL base del backend
 
   constructor(private http: HttpClient) { }  // Inyecta el servicio HttpClient para hacer peticiones HTTP

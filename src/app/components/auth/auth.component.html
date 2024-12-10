@@ -1,0 +1,41 @@
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 75vh;">
+    <!-- recordar container no se ve, solo es un contenedor para meter los div dentro -->
+    <!-- justify-content-center: alinea los elementos hijos de manera horizontal (en el eje X) al centro del contenedor -->
+    <!-- align-items-center: alinea los elementos hijos verticalmente (en el eje Y) al centro del contenedor. -->
+    <div class="card custom-card-bg" style="width: 30%;">
+        <div class="card-header">
+            <h5 class="card-title text-center custom-title">LOGIN PAGE</h5>
+        </div>
+        <div class="card-body custom-card-body">
+            <form (ngSubmit)="onSubmit()">
+                <!-- La clase input-group usa CSS Flexbox para alinear sus elementos hijos (el <span> y el <input>) en una fila horizontal: -->
+                <div class="input-group mb-2">
+                    <!-- input-group es una clase de Bootstrap que agrupa un input con algún otro elemento,  -->
+                    <!-- como un ícono, un texto o un botón. En este caso, se usa para colocar un ícono junto al campo de entrada (username). -->
+                    <!-- mb-4 es una clase de Bootstrap que aplica un margen en la parte inferior del elemento, en este caso, de 1.5rem (24px) -->
+                    <span class="input-group-text">
+                        <i class="bx bxs-user"></i>
+                    </span>
+                    <!-- [(ngModel)] se usa para implementar el enlace bidireccional de datos entre una propiedad 
+                     del modelo en la clase del componente (user.userName) y un elemento en la plantilla HTML  -->
+                    <input name="userName" class="form-control my-2" placeholder="username" [(ngModel)]="user.userName">
+                </div>
+
+                <div class="input-group mb-2">
+                    <span class="input-group-text">
+                        <i class="bx bxs-lock-alt"></i>
+                    </span>
+                    <!-- Campo de entrada para la contraseña -->
+                    <input name="password" class="form-control my-2 password-input" [type]="passwordType" placeholder="password"
+                        [(ngModel)]="user.password" />
+                    <span class="input-group-text password-toggle" (click)="passwordVisibility()">
+                        <i [class]="passwordType === 'password' ? 'bx bxs-show' : 'bx bxs-hide'" style="position: absolute; left: 290px" ></i>
+                    </span>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-create w-50 btn-sm my-2">LOGIN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

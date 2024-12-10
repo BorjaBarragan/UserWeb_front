@@ -24,6 +24,8 @@
     }
 
     @if(paginator.number < paginator.totalPages - 1) { <li class="page-item">
+        <!-- // Las páginas están numeradas desde 0 (0-based indexing), por lo que la última página es totalPages - 1. 
+        // 10 paginas que se entienden como 0 a 9 por eso el -1, para estar en el n 9 y estar en la ultima pagina. -->
         <a class="page-link font-weight-bold py-2 px-3" [routerLink]="[url,paginator.number+1]" aria-label="Next">
             <span aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -36,7 +38,8 @@
         </li>
         }
         <li class="page-item" [class.disabled]="paginator.number === paginator.totalPages - 1">
-            <a class="page-link font-weight-bold py-2 px-3" [routerLink]="[url,paginator.totalPages-1]"aria-label="Last">
+            <a class="page-link font-weight-bold py-2 px-3" [routerLink]="[url,paginator.totalPages-1]"
+                aria-label="Last">
                 <span aria-hidden="true">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-chevron-bar-right" viewBox="0 0 16 16">

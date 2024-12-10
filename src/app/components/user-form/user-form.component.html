@@ -1,5 +1,5 @@
-<div class="card custom-card-bg">
-    <div class="card-content">
+<div class="container d-flex justify-content-center align-items-center my-7" style="min-height: 100vh;">
+    <div class="card custom-card-bg" style="max-width: 500px; width: 100%;">
         <div class="card-header">
             <h5 class="card-title custom-title">{{ user.id ? 'UPDATE' : 'CREATE' }} USER</h5>
         </div>
@@ -11,23 +11,16 @@
                     </span>
                     <input placeholder="Name" name="name" [(ngModel)]="user.name" class="form-control my-2"
                         #name="ngModel">
-                    <!-- Los quitamos ya que la validacion se hace en los metodos create y update-->
-                    <!-- required-->
-                    <!-- maxlength="20"-->
                 </div>
                 @if(errors?.name){
                 <div class="text-danger "><strong>{{errors.name}}</strong></div> }
                 <!-- todos los siguientes if podriamos quitarlos ya que estamos utilzando otro tipo de validacion-->
                 <!-- @if(name.invalid && (name.dirty || name.touched)){
                 @if(name.errors!['required']){
-                <div class="text-danger text-center">
-                    <strong>Nombre requerido </strong>
-                </div>
+                <div class="text-danger text-center"><strong>Nombre requerido </strong></div>
                 }
                 @if(name.errors!['maxlength']){
-                <div class="text-danger text-center">
-                    <strong>Máximo 20 letras </strong>
-                </div>
+                <div class="text-danger text-center"><strong>Máximo 20 letras </strong></div>
                 }
                 } -->
                 <div class="input-group mb-2">
@@ -41,18 +34,6 @@
                 </div>
                 @if(errors?.lastName){
                 <div class="text-danger "><strong>{{errors.lastName}}</strong></div> }
-                <!-- @if(lastName.invalid && (lastName.dirty || lastName.touched)){
-                @if(lastName.errors!['required']){
-                <div class="text-danger text-center">
-                    <strong>Apellido requerido</strong>
-                </div>
-                }
-                @if(lastName.errors!['maxlength']){
-                <div class="text-danger text-center">
-                    <strong>Máximo 20 letras</strong> s
-                </div>
-                }
-                } -->
                 <div class="input-group mb-2">
                     <span class="input-group-text">
                         <i class='bx bxs-envelope'></i>
@@ -64,69 +45,32 @@
                 </div>
                 @if(errors?.email){
                 <div class="text-danger "><strong>{{errors.email}}</strong></div> }
-                <!-- @if(email.invalid && (email.dirty || email.touched)){
-                @if(email.errors!['required']){
-                <div class="text-danger text-center">
-                    <strong>Email requerido</strong>
-                </div>
-                }
-                @if(email.errors!['email']) {
-                <div class="text-danger text-danger text-center">
-                    <strong>Formato email no válido</strong>
-                </div>
-                }
-                } -->
                 <div class="input-group mb-2">
                     <span class="input-group-text">
                         <i class='bx bxs-face'></i>
                     </span>
-                    <input placeholder="userName" name="userName" [(ngModel)]="user.userName"
-                     class="form-control my-2" #userName="ngModel">
+                    <input placeholder="userName" name="userName" [(ngModel)]="user.userName" class="form-control my-2"
+                        #userName="ngModel">
                     <!-- required-->
                     <!-- maxlength="20"-->
                 </div>
                 @if(errors?.userName){
                 <div class="text-danger "><strong>{{errors.userName}}</strong></div> }
-                <!-- @if(userName.invalid && (userName.dirty || userName.touched)){
-                @if(userName.errors!['required']){
-                <div class="text-danger text-danger text-center">
-                    <strong>Nombre de usuario requerido</strong>
-                </div>
+                @if(user.id == 0){
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">
+                            <i class='bx bxs-lock-alt'></i>
+                        </span>
+                        <input placeholder="Password" name="password" type="password" [(ngModel)]="user.password"
+                            class="form-control my-2" #password="ngModel">
+                    </div>
+                    @if(errors?.password){
+                    <div class="text-danger "><strong>{{errors.password}}</strong></div>
+                    }
                 }
-                @if(userName.errors!['minlength']){
-                <div class="text-danger text-danger text-center">
-                    <strong>Mínimo 6 letras</strong>
-                </div>
-                }
-                } -->
-                <div class="input-group mb-2">
-                    <span class="input-group-text">
-                        <i class='bx bxs-lock-alt'></i>
-                    </span>
-                    <input placeholder="Password" name="password" type="password" [(ngModel)]="user.password"
-                        class="form-control my-2" #password="ngModel">
-                    <!-- Los quitamos ya que la validacion se hace en los metodos create y update-->
-                    <!-- required-->
-                    <!-- minlength="8"-->
-                </div>
-                @if(errors?.password){
-                <div class="text-danger "><strong>{{errors.password}}</strong></div>
-                }
-                <!-- @if(password.invalid && (password.dirty || password.touched)){
-                @if(password.errors!['required']){
-                <div class="text-danger text-danger text-center">
-                    <strong>Contraseña requerida</strong>
-                </div>
-                }
-                @if(password.errors!['minlength']){
-                <div class="text-danger text-danger text-center">
-                    <strong>Mínimo 6 letras</strong>
-                </div>
-                }
-                } -->
                 <div class="text-center">
                     <button type="submit" class="btn btn-create my-2 btn-sm"> <!--[disabled]="userForm.invalid-->
-                        {{ user.id ? 'Update' : 'Create' }}
+                        {{ user.id ? 'UPDATE' : 'CREATE' }}
                     </button>
                 </div>
             </form>
