@@ -5,6 +5,8 @@ import { UserService } from '../../services/user.service';
 import { SharingDataService } from '../../services/sharing-data.service';
 import { PaginatorComponent } from '../paginator/paginator.component';
 import { AuthService } from '../../services/auth.service';
+import { Store } from '@ngrx/store';
+import { load } from '../../store/users.actions';
 
 @Component({
   selector: 'user',
@@ -21,15 +23,20 @@ export class UserComponent implements OnInit {
   paginator: any = {};
 
   constructor(
+    private store: Store<{users:any}>,
     private sharingData: SharingDataService,
     private service: UserService,
     private router: Router,
     private route: ActivatedRoute,
     private authService : AuthService,
   ) {
-    //this.router.getCurrentNavigation()
-    //se añade en el constructor ya que state solo está disponible durante la navegación
-    // activa (es decir, mientras se está construyendo el nuevo componente).
+
+    //COMENTAMOS PORQUE DA FALLO.
+    // this.store.select('users').subscribe(state => {
+    //   this.users = state.users;
+    //   this.paginator = state.paginator;
+    // })
+
     if (this.router.getCurrentNavigation()?.extras.state) {
       this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
       this.paginator = this.router.getCurrentNavigation()?.extras.state!['paginator'];
@@ -37,26 +44,19 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Solo buscamos los usuarios en el servidor si no hay datos de usuarios ya cargados
     if (this.users == undefined || this.users == null || this.users.length == 0) {
       
-      // Suscripción a los parámetros de la URL usando `paramMap`, que es un Observable
-      // de Angular nos permite obtener parametros de la URL.
       this.route.paramMap.subscribe(params => {       
-        // Obtenemos el número de página de los parámetros de la URL (o usamos 0 como valor por defecto)
         const page = +(params.get('page') || '0');
-        console.log(page); 
-        // Llamada al servicio `UserService` para obtener usuarios paginados
+        console.log(page)
+        //COMENTAMOS PORQUE DA FALLO.
+        this.store.dispatch(load({page}));
+
+        //NO COMENTAMOS PORQUE NO DA FALLO.
         this.service.findAllPageable(page).subscribe(pageable => {   
-          // Asignamos la lista de usuarios al componente
           this.users = pageable.content as User[];          
-          // Asignamos el objeto de paginación al componente
           this.paginator = pageable;
-          // Emitimos un evento con los nuevos datos para que otros componentes puedan actualizarse
-          this.sharingData.pageUsersEventeEmitter.emit({
-            users: this.users,
-            paginator: this.paginator
-          });
+          this.sharingData.pageUsersEventeEmitter.emit({users: this.users,paginator: this.paginator});
         });
       });
     }
