@@ -7,6 +7,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
 import { state } from '@angular/animations';
 import { AuthService } from '../services/auth.service';
+import { Store } from '@ngrx/store';
+import { add, find, findAll, remove, setPaginator, update } from '../store/users.actions';
 
 @Component({
   selector: 'user-app',
@@ -18,13 +20,19 @@ export class UserAppComponent implements OnInit {
 
   users: User[] = [];
   paginator: any = {};
+  user !: User;
 
   constructor(
+    private store: Store<{ users: any }>,
     private router: Router,
     private service: UserService,
     private sharingData: SharingDataService,
-    private authService: AuthService,
-  ) {
+    private authService: AuthService) {
+    this.store.select('users').subscribe(state => {
+      this.users = state.users;
+      this.paginator = state.paginator;
+      this.user = { ...state.user };
+    })
 
   }
 
@@ -69,17 +77,18 @@ export class UserAppComponent implements OnInit {
 
   pageUsersEvent() {
     this.sharingData.pageUsersEventeEmitter.subscribe(pageable => {
-      this.users = pageable.users;
-      this.paginator = pageable.paginator;
+      // this.users = pageable.users;
+      // this.paginator = pageable.paginator;
+      this.store.dispatch(findAll({ users: pageable.users }))
+      this.store.dispatch(setPaginator({ paginator: pageable.paginator }))
     });
   }
 
   findUserById() {
     this.sharingData.findUserByIdEventEmitter.subscribe(id => {
-      // Buscar el usuario con ese ID en la lista de usuarios
-      const user = this.users.find(user => user.id == id);
-      // Emitir el usuario encontrado para que lo reciba el formulario
-      this.sharingData.selectUserEventEmitter.emit(user);
+      // const user = this.users.find(user => user.id == id);
+      this.store.dispatch(find({ id }))
+      this.sharingData.selectUserEventEmitter.emit(this.user);
     });
   }
 
@@ -92,9 +101,12 @@ export class UserAppComponent implements OnInit {
           //next y error son atributos de un objeto, por lo tanto van ani {}
           {
             //next: cuando todo sale bien
-            next: (userUpdate) => {
+            next: (userUpdated) => {
               //map, actualiza el array de usuarios reemplazandos el usuarios que ha sido actualizado userUpdate
-              this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
+              //1. Sin Redux
+              // this.users = this.users.map(u => (u.id == userUpdated.id) ? { ...userUpdated } : u);
+              //2. Con Redux
+              this.store.dispatch(update({ userUpdated }));
               this.router.navigate(['/users'], {
                 state: {
                   users: this.users,
@@ -119,11 +131,14 @@ export class UserAppComponent implements OnInit {
         this.service.create(user).subscribe(
           //Observable 2- create
           {
-            next: (userNew) => {
+            next: userNew => {
               //aqui creamos una copia de todos los usuarios
               //añade un nuevo usuario al final de la copia
               //actualiza this.users para que sea el nuevo array con todos los usuarios y el nuevo
-              this.users = [...this.users, { ...userNew }];
+              //1. Sin Redux
+              // this.users = [...this.users, { ...userNew }];
+              //2. Con Redux
+              this.store.dispatch(add({ userNew }));
               this.router.navigate(['/users'], {
                 state: {
                   users: this.users,
@@ -161,7 +176,10 @@ export class UserAppComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           this.service.delete(id).subscribe(() => {
-            this.users = this.users.filter(user => user.id != id);
+            //1. Sin Redux
+            // this.users = this.users.filter(user => user.id != id);
+            //2. Con Redux
+            this.store.dispatch(remove({ id }))
             // Navega a la ruta '/users/create' pero sin cambiar la URL visible en el navegador (navegación silenciosa).
             this.router.navigate(['/user/create'], { skipLocationChange: true }).then(() => {
               this.router.navigate(['/users'], {
