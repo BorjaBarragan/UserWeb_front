@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../models/user';
-import { SharingDataService } from '../../services/sharing-data.service';
-import { ActivatedRoute} from '@angular/router';
-import { UserService } from '../../services/user.service';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { add, find, resetUser, setUserForm, update } from '../../store/users.actions';
 
 @Component({
   selector: 'user-form',
@@ -19,43 +19,39 @@ export class UserFormComponent implements OnInit {
   errors: any = {};
 
   constructor(
-    private sharingData: SharingDataService,
-    private route: ActivatedRoute,
-    private service: UserService) 
-    {
+    private store: Store<{ users: any }>,
+    private route: ActivatedRoute,) {
     //hacemos que el formulario empiece siempre vacio.
     this.user = new User();
+
+    this.store.select('users').subscribe(state => {
+      this.errors = state.errors;
+      this.user = { ...state.user }
+    })
   }
-  
+
   ngOnInit(): void {
-    //aqui es donde escuchamos los eventos.
-    this.sharingData.errorsUserFormsEventEmitter.subscribe(errors => this.errors = errors);
-    this.sharingData.selectUserEventEmitter.subscribe(user => this.user = user);
-    //Nos suscribimos a los cambios en los parámetros de la URL usando 'paramMap'.
-    //Queremos extraer el parámetro 'id' de la URL, que puede ser algo como '/users/5'.
+    this.store.dispatch(resetUser());
     this.route.paramMap.subscribe(params => {
-      // Obtenemos el valor del parámetro 'id' de la URL. 
-      // Si no existe, le asignamos el valor '0' por defecto.
       const id: number = + (params.get('id') || '0');  // El '+' convierte el id a número
       // Si el 'id' es mayor a 0, significa que probablemente estamos editando un usuario existente.
       if (id > 0) {
-         this.sharingData.findUserByIdEventEmitter.emit(id);
-        //this.service.findById(id).subscribe(user => this.user = user);
+        this.store.dispatch(find({ id }))
       }
     });
   }
 
   onSubmit(userForm: NgForm): void {
-    //if (userForm.valid) {
-      this.sharingData.newUserEventEmitter.emit(this.user);
-      console.log(this.user);
-    //}
-    // userForm.reset();
-    // userForm.resetForm();
+    this.store.dispatch(setUserForm({ user: this.user }));
+    if (this.user.id > 0) {
+      this.store.dispatch(update({ userUpdated: this.user }));
+    } else {
+      this.store.dispatch(add({ userNew: this.user }));
+    }
   }
 
   onClear(userForm: NgForm) {
-    this.user = new User();
+    this.store.dispatch(resetUser());
     userForm.reset();
     userForm.resetForm();
   }

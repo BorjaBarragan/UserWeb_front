@@ -53,7 +53,7 @@ export class UserService {
     return this.http.put<User>(`${this.url}/${user.id}`, user);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`)
+  delete(id: number): Observable<number> {
+    return this.http.delete<number>(`${this.url}/${id}`)
   }
 }

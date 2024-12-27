@@ -12,14 +12,10 @@ import { AuthService } from '../../services/auth.service';
 })
 export class NavbarComponent {
 
-  constructor(private authService: AuthService , 
-    private router : Router) {
+  constructor(private authService: AuthService,
+    private router: Router) {
 
-    }
-
-  @Input() users: User[] = [];
-
-  @Input() paginator = {};
+  }
 
   // Obtiene el usuario desde el servicio AuthService
   get login() {
@@ -30,7 +26,7 @@ export class NavbarComponent {
     return this.authService.isAdmin();
   }
 
-  handlerLogout(){
+  handlerLogout() {
     this.authService.logout();
     this.router.navigate(['/login'])
   }

@@ -5,6 +5,9 @@ import { UserService } from '../../services/user.service';
 import { SharingDataService } from '../../services/sharing-data.service';
 import { PaginatorComponent } from '../paginator/paginator.component';
 import { AuthService } from '../../services/auth.service';
+import { Store } from '@ngrx/store';
+import { load, remove } from '../../store/users.actions';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'user',
@@ -21,56 +24,52 @@ export class UserComponent implements OnInit {
   paginator: any = {};
 
   constructor(
+    private store: Store<{ users: any }>,
     private sharingData: SharingDataService,
     private service: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private authService : AuthService,
+    private authService: AuthService,
   ) {
-    //this.router.getCurrentNavigation()
-    //se añade en el constructor ya que state solo está disponible durante la navegación
-    // activa (es decir, mientras se está construyendo el nuevo componente).
-    if (this.router.getCurrentNavigation()?.extras.state) {
-      this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
-      this.paginator = this.router.getCurrentNavigation()?.extras.state!['paginator'];
-    }
+    //Esto asegura que los datos en this.users y this.paginator estén sincronizados con el estado global.
+    //Cada vez que el Store cambie, el componente se actualizará automáticamente.
+    this.store.select('users').subscribe(state => {
+      this.users = state.users;
+      this.paginator = state.paginator;
+    })
+
+    // if (this.router.getCurrentNavigation()?.extras.state) {
+    //   this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
+    //   this.paginator = this.router.getCurrentNavigation()?.extras.state!['paginator'];
+    // }
   }
 
   ngOnInit(): void {
-    // Solo buscamos los usuarios en el servidor si no hay datos de usuarios ya cargados
-    if (this.users == undefined || this.users == null || this.users.length == 0) {
-      
-      // Suscripción a los parámetros de la URL usando `paramMap`, que es un Observable
-      // de Angular nos permite obtener parametros de la URL.
-      this.route.paramMap.subscribe(params => {       
-        // Obtenemos el número de página de los parámetros de la URL (o usamos 0 como valor por defecto)
-        const page = +(params.get('page') || '0');
-        console.log(page); 
-        // Llamada al servicio `UserService` para obtener usuarios paginados
-        this.service.findAllPageable(page).subscribe(pageable => {   
-          // Asignamos la lista de usuarios al componente
-          this.users = pageable.content as User[];          
-          // Asignamos el objeto de paginación al componente
-          this.paginator = pageable;
-          // Emitimos un evento con los nuevos datos para que otros componentes puedan actualizarse
-          this.sharingData.pageUsersEventeEmitter.emit({
-            users: this.users,
-            paginator: this.paginator
-          });
-        });
-      });
-    }
+    this.route.paramMap.subscribe(params => this.store.dispatch(load({ page: +(params.get('page') || '0') })))
   }
 
+
   onRemoveUser(id: number): void {
-    this.sharingData.idUserEventEmitter.emit(id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.store.dispatch(remove({ id }));
+      }
+    });
   }
 
   onSelectedUser(user: User): void {
     this.router.navigate(['/users/edit', user.id]);
   }
 
-  get admin(){
+  get admin() {
     return this.authService.isAdmin();
   }
 }
