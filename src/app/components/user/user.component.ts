@@ -6,7 +6,7 @@ import { SharingDataService } from '../../services/sharing-data.service';
 import { PaginatorComponent } from '../paginator/paginator.component';
 import { AuthService } from '../../services/auth.service';
 import { Store } from '@ngrx/store';
-import { load, remove } from '../../store/users.actions';
+import { load, remove } from '../../store/users/users.actions';
 import Swal from 'sweetalert2';
 
 @Component({

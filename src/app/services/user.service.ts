@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -54,6 +54,8 @@ export class UserService {
   }
 
   delete(id: number): Observable<number> {
-    return this.http.delete<number>(`${this.url}/${id}`)
+    return this.http.delete<number>(`${this.url}/${id}`).pipe(
+      map(() => id)
+    );
   }
 }

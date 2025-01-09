@@ -3,7 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../models/user';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { add, find, resetUser, setUserForm, update } from '../../store/users.actions';
+import { add, find, resetUser, update } from '../../store/users/users.actions';
 
 @Component({
   selector: 'user-form',
@@ -32,6 +32,7 @@ export class UserFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(resetUser());
+    //paraMap, de ActivateRoute, nos permite acceder a l url. con param.get, adquirimos la id en este caso
     this.route.paramMap.subscribe(params => {
       const id: number = + (params.get('id') || '0');  // El '+' convierte el id a número
       // Si el 'id' es mayor a 0, significa que probablemente estamos editando un usuario existente.
@@ -42,7 +43,8 @@ export class UserFormComponent implements OnInit {
   }
 
   onSubmit(userForm: NgForm): void {
-    this.store.dispatch(setUserForm({ user: this.user }));
+    //ya no hacemos el  reseteo del form aqui
+    // this.store.dispatch(setUserForm({ user: this.user }));
     if (this.user.id > 0) {
       this.store.dispatch(update({ userUpdated: this.user }));
     } else {
